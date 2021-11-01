@@ -48,6 +48,10 @@
     "updater": {
       "active": false
     },
+    "systemTray": {
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": true
+    },
     "allowlist": {
       "all": true
     },
@@ -59,7 +63,8 @@
         "resizable": true,
         "fullscreen": false,
         "visible": false,
-        "center": true
+        "center": true,
+        "decorations": false
       },
       {
         "width": 400,
@@ -69,7 +74,8 @@
         "url": "splashscreen.html",
         "label": "splashscreen",
         "alwaysOnTop": true,
-        "transparent": true
+        "transparent": true,
+        "skipTaskbar": true
       }
     ],
     "security": {
