@@ -20,7 +20,7 @@ function App() {
     return (
         <ChakraProvider theme={theme}>
             <WindowBar/>
-            <Box bgGradient="linear(to-tr, #283048, #859398)" width="100%" height="100%">
+            <Box bgGradient="linear(to-tr, #283048, #859398)" width="100vw" height="100vh">
                 <Route path="/" component={Welcome}/>
                 <Route path="/home" component={Home}/>
                 <Route path="/welcome" component={Welcome}/>
