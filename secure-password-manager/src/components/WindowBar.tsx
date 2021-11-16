@@ -4,15 +4,15 @@ import {FaRegWindowMaximize, FaRegWindowRestore, FaTimes, FaWindowMinimize} from
 import {useEffect, useState} from "react";
 
 
-export function WindowBar(){
-    const [isMax, setMax] = useState(true);
-
+export function WindowBar() {
+    const [isMax, setMax] = useState(false);
+    let isMaxTimer: NodeJS.Timer;
     useEffect(() => {
         async function getMaximized() {
             const windowStatus = await appWindow.isMaximized()
             setMax(windowStatus);
         }
-        getMaximized().catch(e => console.log(e));
+        isMaxTimer = setInterval(getMaximized, 250);
     }, []);
 
     return (
@@ -30,14 +30,12 @@ export function WindowBar(){
                     <FaRegWindowRestore
                         onClick={() => {
                             appWindow.toggleMaximize().catch(e => console.log(e));
-                            setMax(false);
                         }}
                     />
                     :
                     <FaRegWindowMaximize
                         onClick={() => {
                             appWindow.toggleMaximize().catch(e => console.log(e));
-                            setMax(true);
                         }}
                     />
                 }
@@ -46,6 +44,7 @@ export function WindowBar(){
             <div className="titlebar-button" id="titlebar-close">
                 <FaTimes
                     onClick={() => {
+                        clearInterval(isMaxTimer);
                         appWindow.close().catch(e => console.log(e));
                     }}
                 />

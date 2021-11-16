@@ -1,10 +1,16 @@
-import { Box, Text } from "@chakra-ui/react"
+import {Box, Flex, Text} from "@chakra-ui/react"
 
 function Welcome() {
     return (
-        <Box>
-            <Text>Welcome</Text>
-        </Box>
+        <Flex
+            minH={'100vh'}
+            align={'center'}
+            justify={'center'}
+        >
+            <Box bg={"red"} p={20} borderRadius={10}>
+                <Text fontSize={"5xl"}>Welcome</Text>
+            </Box>
+        </Flex>
     )
 }
 

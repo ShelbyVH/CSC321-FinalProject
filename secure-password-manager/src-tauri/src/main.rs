@@ -4,6 +4,8 @@
 )]
 
 use tauri::Manager;
+use tauri_plugin_stronghold::TauriStronghold;
+
 // Create the command:
 #[tauri::command]
 fn close_splashscreen(window: tauri::Window) {
@@ -18,8 +20,8 @@ fn close_splashscreen(window: tauri::Window) {
 // Register the command:
 fn main() {
   tauri::Builder::default()
-      // Add this line
       .invoke_handler(tauri::generate_handler![close_splashscreen])
+      .plugin(TauriStronghold::default())
       .run(tauri::generate_context!())
       .expect("failed to run app");
 }
