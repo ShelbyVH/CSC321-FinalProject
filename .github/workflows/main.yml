@@ -31,17 +31,17 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y webkit2gtk-4.0
-          
-      - name: Switch Directory
-        run: ls && cd ./secure-password-manager/
-        
+                
       - name: Install app dependencies and build it
+        working-directory: ./secure-password-manager
         run: yarn && yarn build
 
       - uses: tauri-apps/tauri-action@v0
+        name: Build App
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          projectPath: ./secure-password-manager
           # the action automatically replaces __VERSION__ with the app version
           tagName: v__VERSION__
           releaseName: 'v__VERSION__'
