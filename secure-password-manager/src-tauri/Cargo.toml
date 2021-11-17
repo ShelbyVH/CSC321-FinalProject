@@ -2,7 +2,7 @@
 name = "app"
 version = "0.1.0"
 description = "A Tauri App"
-authors = ["you"]
+authors = [ "you" ]
 license = ""
 repository = ""
 default-run = "app"
@@ -14,13 +14,13 @@ tauri-build = { version = "1.0.0-beta.4" }
 
 [dependencies]
 serde_json = "1.0"
-serde = { version = "1.0", features = ["derive"] }
+serde = { version = "1.0", features = [ "derive" ] }
 tauri = { version = "1.0.0-beta.8", features = ["api-all", "system-tray"] }
 
-[dependencies.tauri-plugin-stronghold]
-git = "https://github.com/tauri-apps/tauri-plugin-stronghold"
-branch = "main"
+  [dependencies.tauri-plugin-stronghold]
+  git = "https://github.com/tauri-apps/tauri-plugin-stronghold"
+  rev = "3bbc0a98d4d0df1298f5d4ac3cd046019678fd21"
 
 [features]
-default = ["custom-protocol"]
-custom-protocol = ["tauri/custom-protocol"]
+default = [ "custom-protocol" ]
+custom-protocol = [ "tauri/custom-protocol" ]
