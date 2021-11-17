@@ -34,7 +34,7 @@ jobs:
                 
       - name: Install app dependencies and build it
         working-directory: ./secure-password-manager
-        run: yarn && yarn build
+        run: yarn && yarn add -D next && yarn build
 
       - uses: tauri-apps/tauri-action@v0
         name: Build App
