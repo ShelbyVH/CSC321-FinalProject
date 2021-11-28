@@ -1,5 +1,6 @@
 name: CI
-on: push
+on:
+  workflow_dispatch:
 
 env:
   CARGO_TERM_COLOR: always
@@ -22,6 +23,8 @@ jobs:
 
       - uses: c-hive/gha-yarn-cache@v1
         name: Yarn Cache
+        with:
+          directory: ./secure-password-manager
 
       - name: Rust setup
         uses: actions-rs/toolchain@v1
@@ -31,7 +34,7 @@ jobs:
       - uses: Swatinem/rust-cache@v1
         name: Rust Cache
         with:
-          working-directory: ./src-tauri
+          working-directory: ./secure-password-manager/src-tauri
 
       - name: Install Linux Build Tools
         if: matrix.platform == 'ubuntu-latest'
