@@ -24,7 +24,7 @@ jobs:
       - uses: c-hive/gha-yarn-cache@v1
         name: Yarn Cache
         with:
-          directory: ./secure-password-manager
+          directory: secure-password-manager
 
       - name: Rust setup
         uses: actions-rs/toolchain@v1
