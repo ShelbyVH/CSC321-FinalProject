@@ -1,7 +1,8 @@
-import {Box, Button, Heading, Input, Stack, Text} from "@chakra-ui/react";
+import {Box, Button, Center, Heading, Input, Stack, Text} from "@chakra-ui/react";
 
 export default function SignUp() {
     return (
+        <Center>
         <Stack
             bg={'gray.50'}
             rounded={'xl'}
@@ -70,7 +71,7 @@ export default function SignUp() {
                     Submit
                 </Button>
             </Box>
-        </Stack>
+        </Stack></Center>
     )
 
 }
