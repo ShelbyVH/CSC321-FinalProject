@@ -24,7 +24,7 @@ export default function Passwords() {
 
     return (
         <Flex
-            minH={'100vh'}
+            minH={'calc(100vh - 50px)'}
             align={'center'}
             justify={'center'}
         >

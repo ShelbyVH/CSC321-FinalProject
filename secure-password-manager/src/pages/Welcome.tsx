@@ -11,8 +11,8 @@ import SignUp from "../components/SignUp";
 export default function Welcome() {
     return (
         <Box>
-            <Grid minH="100vh" columns={1}>
-                <SimpleGrid columns={2} spacing={8} padding={16}>
+            <Grid minH={'calc(100vh - 50px)'} columns={1}>
+                <SimpleGrid columns={2} spacing={8} padding={12} >
                     <Center>
                         <Stack>
                             <Heading
