@@ -1,0 +1,14 @@
+{
+  "name": "Secure Password Manager",
+  "version": "1.0",
+  "description": "CSC 321 Final Project",
+  "permissions": ["notifications", "activeTab"],
+  "content_security_policy": "script-src 'self' https://js.pusher.com/7.0/pusher.min.js https://stats.pusher.com; object-src 'self'",
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "32": "img/icon32.png"
+    }
+  },
+  "manifest_version": 2
+}

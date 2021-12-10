@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Hide eye in password fields */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
