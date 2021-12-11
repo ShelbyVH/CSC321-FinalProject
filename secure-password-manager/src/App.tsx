@@ -8,6 +8,8 @@ import Welcome from "./pages/Welcome";
 import {WindowBar} from "./components/WindowBar";
 import Passwords from "./pages/Passwords";
 import {isPermissionGranted, requestPermission} from "@tauri-apps/api/notification";
+import {SupabaseContextProvider} from "use-supabase";
+import {supabase} from "./api/SupabaseClient";
 
 document.addEventListener('DOMContentLoaded', () => {
     // This will wait for the window to load
@@ -21,7 +23,7 @@ async function setupNotifications() {
         // Broken Might Fix
         const permissions = await requestPermission();
         console.log(permissions);
-        return(permissions);
+        return (permissions);
     }
 }
 
@@ -29,16 +31,18 @@ function App() {
     // setupNotifications().then(res => console.log(res));
     // sendNotification("test");
     return (
-        <ChakraProvider theme={theme}>
-            <WindowBar/>
-            <Box bgGradient="linear(to-tr, #283048, #859398)" width="100vw" height="100vh" paddingTop={"50px"}>
-                <Route path="/" component={Passwords}/>
-                <Route path="/home" component={Home}/>
-                <Route path="/welcome" component={Welcome}/>
-                <Route path="/passwords" component={Passwords}/>
-                <Route path="/login" component={Login}/>
-            </Box>
-        </ChakraProvider>
+        <SupabaseContextProvider client={supabase}>
+            <ChakraProvider theme={theme}>
+                <WindowBar/>
+                <Box bgGradient="linear(to-tr, #283048, #859398)" width="100vw" height="100vh" paddingTop={"50px"}>
+                    <Route path="/" component={Welcome}/>
+                    <Route path="/home" component={Home}/>
+                    <Route path="/welcome" component={Welcome}/>
+                    <Route path="/passwords" component={Passwords}/>
+                    <Route path="/login" component={Login}/>
+                </Box>
+            </ChakraProvider>
+        </SupabaseContextProvider>
     )
 }
 

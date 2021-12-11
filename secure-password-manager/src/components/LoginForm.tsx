@@ -11,12 +11,27 @@ import {
 } from "@chakra-ui/react";
 import {useState} from "react";
 import {useLocation} from "wouter";
+import {supabase} from "../api/SupabaseClient";
 
 export default function LoginForm() {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     const [location, setLocation] = useLocation();
-    const [show1, setShow1] = useState(false)
-    const handleClick1 = () => setShow1(!show1)
-    // const
+    const [show, setShow] = useState(false)
+    const handleClick = () => setShow(!show)
+
+    const handleLogin = async (email: string, password: string) => {
+        try {
+            const {error} = await supabase.auth.signIn({email: email, password: password,})
+            if (error) throw error
+            // alert('Check your email for the login link!')
+        } catch (error: any) {
+            alert(error.error_description || error.message)
+        } finally {
+            alert("Login Successful!");
+        }
+    }
+
     return (
         <Center minH={'calc(100vh - 50px)'}>
             <Box>
@@ -47,6 +62,8 @@ export default function LoginForm() {
                     <Box as={'form'} mt={10}>
                         <Stack spacing={4}>
                             <Input
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
                                 type={"email"}
                                 placeholder="firstname@lastname.io"
                                 bg={'gray.100'}
@@ -58,6 +75,8 @@ export default function LoginForm() {
                             />
                             <InputGroup size='md'>
                                 <Input
+                                    value={password}
+                                    onChange={e => setPassword(e.target.value)}
                                     bg={'gray.100'}
                                     border={0}
                                     color={'gray.500'}
@@ -65,23 +84,26 @@ export default function LoginForm() {
                                         color: 'gray.500',
                                     }}
                                     pr='4.5rem'
-                                    type={show1 ? 'text' : 'password'}
+                                    type={show ? 'text' : 'password'}
                                     placeholder='Enter password'
                                 />
                                 <InputRightElement width='4.5rem'>
-                                    <Button h='1.75rem' size='sm' onClick={handleClick1}
+                                    <Button h='1.75rem' size='sm' onClick={handleClick}
                                             bgGradient='linear(to-r, red.400,pink.400)'
                                             _hover={{
                                                 bgGradient: 'linear(to-r, red.400,pink.400)',
                                                 boxShadow: 'xl',
                                             }}
                                     >
-                                        {show1 ? 'Hide' : 'Show'}
+                                        {show ? 'Hide' : 'Show'}
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
                         </Stack>
                         <Button
+                            onClick={() => {
+                                handleLogin(email, password)
+                            }}
                             fontFamily={'heading'}
                             mt={8}
                             w={'full'}
@@ -91,11 +113,12 @@ export default function LoginForm() {
                                 bgGradient: 'linear(to-r, red.400,pink.400)',
                                 boxShadow: 'xl',
                             }}>
-
                             Login
                         </Button>
                         <Button
-                            onClick={() => { setLocation("/welcome")}}
+                            onClick={() => {
+                                setLocation("/welcome")
+                            }}
                             fontFamily={'heading'}
                             mt={8}
                             w={'full'}

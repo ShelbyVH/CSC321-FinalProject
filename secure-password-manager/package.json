@@ -15,7 +15,7 @@
     "@chakra-ui/react": "^1.7.1",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
-    "@supabase/supabase-js": "^1.24.0",
+    "@supabase/supabase-js": "^1.28.5",
     "@tauri-apps/api": "^1.0.0-beta.8",
     "framer-motion": "^4",
     "pusher-js": "^7.0.3",
@@ -23,6 +23,7 @@
     "react-dom": "^17.0.0",
     "react-icons": "^4.3.1",
     "tauri-plugin-stronghold-api": "github:tauri-apps/tauri-plugin-stronghold#3bbc0a98d4d0df1298f5d4ac3cd046019678fd21",
+    "use-supabase": "^1.0.3",
     "wouter": "^2.8.0-alpha.1"
   },
   "devDependencies": {

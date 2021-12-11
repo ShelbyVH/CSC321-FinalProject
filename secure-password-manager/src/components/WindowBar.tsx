@@ -7,15 +7,18 @@ import {
     FaWindowMinimize,
     FaEdit,
     FaMemory,
-    FaPaw, FaRobot
+    FaRobot, FaSignOutAlt
 } from "react-icons/fa";
 import {useEffect, useState} from "react";
 import Lock from "../images/Lock.svg";
 import {Box, IconButton, Menu, MenuButton, MenuItem, MenuList} from '@chakra-ui/react';
 import {useLocation} from 'wouter';
+import {supabase} from "../api/SupabaseClient";
+import {useUser} from "use-supabase";
 
 
 export function WindowBar() {
+    const [location, setLocation] = useLocation();
     const [isMax, setMax] = useState(false);
     let isMaxTimer: NodeJS.Timer;
     useEffect(() => {
@@ -27,7 +30,16 @@ export function WindowBar() {
         isMaxTimer = setInterval(getMaximized, 250);
     }, []);
 
-    const [location, setLocation] = useLocation();
+    const SignOut = async function () {
+        try {
+            let {error} = await supabase.auth.signOut()
+            if (error) throw error
+        } catch (error: any) {
+            alert(error.error_description || error.message)
+        }
+    }
+    const user = useUser()
+
 
     return (
         <div data-tauri-drag-region="true" className="titlebar">
@@ -44,15 +56,19 @@ export function WindowBar() {
                         <MenuItem icon={<FaRobot/>} command='⌘T' onClick={() => setLocation("/home")}>
                             New Tab
                         </MenuItem>
-                        <MenuItem icon={<FaPaw/>} command='⌘N' onClick={() => setLocation("/welcome")}>
+                        <MenuItem icon={<FaEdit/>} command='⌘N' onClick={() => setLocation("/welcome")}>
                             New Window
                         </MenuItem>
                         <MenuItem icon={<FaMemory/>} command='⌘⇧N' onClick={() => setLocation("/login")}>
                             Open Closed Tab
                         </MenuItem>
-                        <MenuItem icon={<FaEdit/>} command='⌘O' onClick={() => setLocation("/passwords")}>
-                            Open File...
-                        </MenuItem>
+                        {user ?
+                            <MenuItem icon={<FaSignOutAlt/>} onClick={() => {
+                                SignOut()
+                                setLocation("/")
+                            }}>
+                                Sign Out
+                            </MenuItem> : null}
                     </MenuList>
                 </Menu>
             </Box>
