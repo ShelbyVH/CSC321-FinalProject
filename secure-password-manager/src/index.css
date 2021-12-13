@@ -17,3 +17,11 @@ input::-ms-reveal,
 input::-ms-clear {
   display: none;
 }
+
+/* Disable Scrollbar */
+*{
+  -ms-overflow-style: none;
+}
+::-webkit-scrollbar {
+  display: none;
+}

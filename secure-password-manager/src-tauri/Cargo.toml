@@ -19,7 +19,7 @@ tauri = { version = "1.0.0-beta.8", features = ["api-all", "system-tray"] }
 
   [dependencies.tauri-plugin-stronghold]
   git = "https://github.com/tauri-apps/tauri-plugin-stronghold"
-  rev = "3bbc0a98d4d0df1298f5d4ac3cd046019678fd21"
+  rev = "dcae44174801a0b53a53ab347c8e81b967c08c43"
 
 [features]
 default = [ "custom-protocol" ]

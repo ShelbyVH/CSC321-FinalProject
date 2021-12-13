@@ -28,7 +28,7 @@ export default function LoginForm() {
         } catch (error: any) {
             alert(error.error_description || error.message)
         } finally {
-            alert("Login Successful!");
+            // alert("Login Successful!");
         }
     }
 
@@ -117,7 +117,7 @@ export default function LoginForm() {
                         </Button>
                         <Button
                             onClick={() => {
-                                setLocation("/welcome")
+                                setLocation("/")
                             }}
                             fontFamily={'heading'}
                             mt={8}

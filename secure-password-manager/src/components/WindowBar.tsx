@@ -7,7 +7,8 @@ import {
     FaWindowMinimize,
     FaEdit,
     FaMemory,
-    FaRobot, FaSignOutAlt
+    FaRobot,
+    FaSignOutAlt
 } from "react-icons/fa";
 import {useEffect, useState} from "react";
 import Lock from "../images/Lock.svg";
@@ -43,35 +44,36 @@ export function WindowBar() {
 
     return (
         <div data-tauri-drag-region="true" className="titlebar">
-            <Box p={1}>
-                <Menu>
-                    <MenuButton
-                        as={IconButton}
-                        aria-label='Options'
-                        bg={"#1A202C"}
-                        icon={<img src={Lock} alt="logo" className="titlebar-logo"/>}
-                        variant='outline'
-                    />
-                    <MenuList>
-                        <MenuItem icon={<FaRobot/>} command='⌘T' onClick={() => setLocation("/home")}>
-                            New Tab
-                        </MenuItem>
-                        <MenuItem icon={<FaEdit/>} command='⌘N' onClick={() => setLocation("/welcome")}>
-                            New Window
-                        </MenuItem>
-                        <MenuItem icon={<FaMemory/>} command='⌘⇧N' onClick={() => setLocation("/login")}>
-                            Open Closed Tab
-                        </MenuItem>
-                        {user ?
-                            <MenuItem icon={<FaSignOutAlt/>} onClick={() => {
-                                SignOut()
-                                setLocation("/")
-                            }}>
-                                Sign Out
-                            </MenuItem> : null}
-                    </MenuList>
-                </Menu>
-            </Box>
+            <img src={Lock} alt="logo" className="titlebar-logo"/>
+            {/*<Box p={1}>*/}
+                {/*<Menu>*/}
+                {/*    <MenuButton*/}
+                {/*        as={IconButton}*/}
+                {/*        aria-label='Options'*/}
+                {/*        bg={"#1A202C"}*/}
+                {/*        icon={<img src={Lock} alt="logo" className="titlebar-logo"/>}*/}
+                {/*        variant='outline'*/}
+                {/*    />*/}
+                {/*    <MenuList>*/}
+                {/*        <MenuItem icon={<FaRobot/>} command='⌘T' onClick={() => setLocation("/home")}>*/}
+                {/*            New Tab*/}
+                {/*        </MenuItem>*/}
+                {/*        <MenuItem icon={<FaEdit/>} command='⌘N' onClick={() => setLocation("/welcome")}>*/}
+                {/*            New Window*/}
+                {/*        </MenuItem>*/}
+                {/*        <MenuItem icon={<FaMemory/>} command='⌘⇧N' onClick={() => setLocation("/login")}>*/}
+                {/*            Open Closed Tab*/}
+                {/*        </MenuItem>*/}
+                {/*        {user ?*/}
+                {/*            <MenuItem icon={<FaSignOutAlt/>} onClick={() => {*/}
+                {/*                SignOut()*/}
+                {/*                setLocation("/")*/}
+                {/*            }}>*/}
+                {/*                Sign Out*/}
+                {/*            </MenuItem> : null}*/}
+                {/*    </MenuList>*/}
+                {/*</Menu>*/}
+            {/*</Box>*/}
             <div className="titlebar-buttons">
                 <div className="titlebar-button" id="titlebar-minimize" onClick={() => {
                     appWindow.minimize().catch(e => console.log(e));
@@ -89,6 +91,7 @@ export function WindowBar() {
                 </div>
                 <div className="titlebar-button" id="titlebar-close" onClick={() => {
                     clearInterval(isMaxTimer);
+                    SignOut(); //Logout User on Exit
                     appWindow.close().catch(e => console.log(e));
                 }}>
                     <FaTimes/>

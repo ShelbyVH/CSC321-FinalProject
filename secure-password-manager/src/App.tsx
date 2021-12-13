@@ -6,10 +6,14 @@ import Login from "./pages/Login";
 import theme from "./components/theme";
 import Welcome from "./pages/Welcome";
 import {WindowBar} from "./components/WindowBar";
-import Passwords from "./pages/Passwords";
 import {isPermissionGranted, requestPermission} from "@tauri-apps/api/notification";
 import {SupabaseContextProvider} from "use-supabase";
 import {supabase} from "./api/SupabaseClient";
+import LogOut from "./pages/LogOut";
+import PasswordGen from "./pages/user/PasswordGen";
+import Security from "./pages/user/Security";
+import Settings from "./pages/user/Settings";
+import Passwords from "./components/Passwords";
 
 document.addEventListener('DOMContentLoaded', () => {
     // This will wait for the window to load
@@ -35,11 +39,13 @@ function App() {
             <ChakraProvider theme={theme}>
                 <WindowBar/>
                 <Box bgGradient="linear(to-tr, #283048, #859398)" width="100vw" height="100vh" paddingTop={"50px"}>
-                    <Route path="/" component={Welcome}/>
-                    <Route path="/home" component={Home}/>
-                    <Route path="/welcome" component={Welcome}/>
-                    <Route path="/passwords" component={Passwords}/>
-                    <Route path="/login" component={Login}/>
+                    <Route path="/"><Welcome/></Route>
+                    <Route path="/login"><Login/></Route>
+                    <Route path="/logout"><LogOut/></Route>
+                    <Route path="/home"><Home child={<Passwords/>}/></Route>
+                    <Route path="/home/passwordgen"><Home child={<PasswordGen/>}/></Route>
+                    <Route path="/home/security"><Home child={<Security/>}/></Route>
+                    <Route path="/home/settings"><Home child={<Settings/>}/></Route>
                 </Box>
             </ChakraProvider>
         </SupabaseContextProvider>

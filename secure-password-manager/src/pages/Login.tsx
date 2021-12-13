@@ -1,13 +1,12 @@
 import {useUser} from 'use-supabase'
 import LoginForm from "../components/LoginForm";
-import Home from "./Home";
+import {useLocation} from "wouter";
 
 export default function Login() {
-    const user = useUser()
-
-    if (user) {
-        return <Home/>
+    const [location, setLocation] = useLocation();
+    if (useUser()) {
+        setLocation("/home")
+        // return <Home child={null}/>
     }
-
     return <LoginForm/>;
 }
