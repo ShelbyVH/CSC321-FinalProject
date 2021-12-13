@@ -1,6 +1,14 @@
-import {Box, Button, Center, Input, Text} from "@chakra-ui/react";
+import {
+    Box,
+    Center,
+    Heading,
+    Stack,
+} from "@chakra-ui/react";
 import {Location, Stronghold} from "tauri-plugin-stronghold-api";
 import {useEffect, useState} from "react";
+import {useUser} from "use-supabase";
+import {useLocation} from "wouter";
+import PasswordTable from "./PasswordTable";
 
 // const pw = new IsPwned();
 // // console.log(pw.hashPassword('1234'));
@@ -22,11 +30,22 @@ import {useEffect, useState} from "react";
 //     }
 // }
 export default function Passwords() {
+    const [routelocation, setLocation] = useLocation();
     const [passwords, setPasswords] = useState('')
-    const [input, setInput] = useState('');
+    const [input, setInput] = useState('')
+    const [data, setData] = useState({})
+    const user = useUser()
+    var strongHoldPath = "example.stronghold";
+    var strongHoldPassword = "password";
+    if (user) {
+        strongHoldPath = user.email + ".stronghold"
+        strongHoldPassword = user.id;
+    } else {
+        setLocation("/")
+    }
 
 
-    const stronghold = new Stronghold('./store.stronghold', 'password')
+    const stronghold = new Stronghold(strongHoldPath, strongHoldPassword)
     const store = stronghold.getStore('Store', [])
     const vault = stronghold.getVault('Vault', [])
     const location = Location.generic('vault', 'record')
@@ -35,9 +54,10 @@ export default function Passwords() {
     //     console.log('got new stronghold status: ' + status.snapshot.status)
     // })
 
-    useEffect (() => {
+    useEffect(() => {
         InitStronghold().then(() => console.log('procedures finished')).catch(e => console.log('error running procedures: ' + e))
-    },[])
+        readStronghold().catch(e => console.log(e))
+    }, [])
 
 
     async function InitStronghold() {
@@ -62,37 +82,54 @@ export default function Passwords() {
     }
 
 
-
     return (
         <Center minH={'calc(100vh - 50px)'} bgGradient="linear(to-tr, #283048, #859398)">
-            <Box p={0} borderRadius={0}>
-                <Text>Output: {passwords}</Text>
-                {/*<Text>{input}</Text>*/}
-                <Text fontSize={"5xl"}>Passwords</Text>
-                <Input
-                    type="text"
-                    value={input}
-                    onChange={
-                        e => setInput(e.target.value)
-                    }
-                />
-                <Button
-                    onClick={() => {
-                        saveStronghold(input).then(r => readStronghold())
-                        setInput('')
-                    }}
-                    fontFamily={'heading'}
-                    mt={8}
-                    w={'full'}
-                    bgGradient="linear(to-r, red.400,pink.400)"
-                    color={'white'}
-                    _hover={{
-                        bgGradient: 'linear(to-r, red.400,pink.400)',
-                        boxShadow: 'xl',
-                    }}>
-                    Submit
-                </Button>
-                {/*<PasswordTable/>*/}
+            <Box>
+                {/*<Text>Output: {passwords}</Text>*/}
+                {/*/!*<Text>{input}</Text>*!/*/}
+                {/*<Input*/}
+                {/*    type="text"*/}
+                {/*    value={input}*/}
+                {/*    onChange={*/}
+                {/*        e => setInput(e.target.value)*/}
+                {/*    }*/}
+                {/*/>*/}
+                {/*<Button*/}
+                {/*    onClick={() => {*/}
+                {/*        saveStronghold(input).then(r => readStronghold())*/}
+                {/*        setInput('')*/}
+                {/*    }}*/}
+                {/*    fontFamily={'heading'}*/}
+                {/*    mt={8}*/}
+                {/*    w={'full'}*/}
+                {/*    bgGradient="linear(to-r, red.400,pink.400)"*/}
+                {/*    color={'white'}*/}
+                {/*    _hover={{*/}
+                {/*        bgGradient: 'linear(to-r, red.400,pink.400)',*/}
+                {/*        boxShadow: 'xl',*/}
+                {/*    }}>*/}
+                {/*    Submit*/}
+                {/*</Button>*/}
+                <Stack
+                    bg={'gray.50'}
+                    rounded={'md'}
+                    p={6}
+                    m={{base: 4, sm: 6, md: 8}}
+                    spacing={{base: 8}}
+                >
+                    <Stack spacing={4}>
+                        <Heading
+                            color={'gray.800'}
+                            lineHeight={1.1}
+                            fontSize={{base: 'xl', sm: '2xl', md: '3xl'}}>
+                            Password List
+                        </Heading>
+                        {/*<Text color={'gray.500'} fontSize={{base: 'sm', sm: 'md'}}>*/}
+                        {/*    putF*/}
+                        {/*</Text>*/}
+                    </Stack>
+                    <PasswordTable/>
+                </Stack>
             </Box>
         </Center>
     )

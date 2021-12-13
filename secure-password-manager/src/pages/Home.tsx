@@ -42,7 +42,7 @@ export default function Home(props: { child: React.ReactNode; }) {
                 onClose={() => onClose}
                 display={{base: 'none', md: 'block'}}
             />
-            <Box paddingLeft={60} minH={"calc(100vh - 50px)"}>
+            <Box paddingLeft={40} minH={"calc(100vh - 50px)"}>
                 {props.child}
             </Box>
         </Box>
@@ -60,7 +60,7 @@ const SidebarContent = ({onClose, ...rest}: SidebarProps) => {
             bg={useColorModeValue('white', 'gray.900')}
             borderRight="1px"
             borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-            w={{base: 'full', md: 60}}
+            w={{base: 'full', md: 40}}
             pos="fixed"
             h="full"
             {...rest}>
