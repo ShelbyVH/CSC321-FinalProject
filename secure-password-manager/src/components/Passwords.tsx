@@ -1,8 +1,14 @@
 import {
-    Box,
-    Center,
-    Heading,
-    Stack,
+    Box, Button,
+    Center, Spacer,
+    Heading, HStack,
+    Modal, ModalBody,
+    ModalCloseButton,
+    ModalContent, ModalFooter,
+    ModalHeader, ModalOverlay,
+    Stack, useDisclosure, Input,
+    FormLabel, InputLeftAddon,
+    InputGroup, useToast,
 } from "@chakra-ui/react";
 import {Location, Stronghold} from "tauri-plugin-stronghold-api";
 import {useEffect, useState} from "react";
@@ -10,40 +16,22 @@ import {useUser} from "use-supabase";
 import {useLocation} from "wouter";
 import PasswordTable from "./PasswordTable";
 
-// const pw = new IsPwned();
-// // console.log(pw.hashPassword('1234'));
-//
-// try {
-//     await pw.check('PASSWORD');
-// } catch ({count, name}) {
-//     switch (name) {
-//         case 'UnexpectedHttpResponseError':
-//         // A response other than 200 was received
-//         case 'TimedOutError':
-//         // The timeout was reached
-//         case 'InvalidPasswordError':
-//         // The password is either not a string or is empty
-//         case 'BreachedError':
-//             // The password has been breached
-//             // You can use e.count on this error type
-//             console.log(`Password has been breached ${count} times.`);
-//     }
-// }
 export default function Passwords() {
-    const [routelocation, setLocation] = useLocation();
-    const [passwords, setPasswords] = useState('')
-    const [input, setInput] = useState('')
-    const [data, setData] = useState({})
+    const [newPassword, setNewPassword] = useState('')
+    const [newUsername, setNewUsername] = useState('')
+    const [newWebsite, setNewWebsite] = useState('')
+    const [routelocation, setLocation] = useLocation()
+    const toast = useToast()
+    const {isOpen, onOpen, onClose} = useDisclosure()
     const user = useUser()
-    var strongHoldPath = "example.stronghold";
-    var strongHoldPassword = "password";
+    let strongHoldPath = "example.stronghold";
+    let strongHoldPassword = "password";
     if (user) {
         strongHoldPath = user.email + ".stronghold"
         strongHoldPassword = user.id;
     } else {
         setLocation("/")
     }
-
 
     const stronghold = new Stronghold(strongHoldPath, strongHoldPassword)
     const store = stronghold.getStore('Store', [])
@@ -78,38 +66,32 @@ export default function Passwords() {
     }
 
     async function readStronghold() {
-        setPasswords(await store.get(location))
+        const json = await store.get(location)
+        const obj = JSON.parse(json)
+        console.log(obj)
+        return obj;
+    }
+
+    async function handleSubmit() {
+        const obj = await readStronghold()
+        const item = {
+            title: `${newWebsite}`,
+            website: `https://${newWebsite}`,
+            icon: `https://${newWebsite}/favicon.ico`,
+            username: `${newUsername}`,
+            password: `${newPassword}`
+        }
+        obj.push(item);
+        await saveStronghold(JSON.stringify(obj))
+        setNewPassword('')
+        setNewWebsite('')
+        setNewUsername('')
     }
 
 
     return (
         <Center minH={'calc(100vh - 50px)'} bgGradient="linear(to-tr, #283048, #859398)">
             <Box>
-                {/*<Text>Output: {passwords}</Text>*/}
-                {/*/!*<Text>{input}</Text>*!/*/}
-                {/*<Input*/}
-                {/*    type="text"*/}
-                {/*    value={input}*/}
-                {/*    onChange={*/}
-                {/*        e => setInput(e.target.value)*/}
-                {/*    }*/}
-                {/*/>*/}
-                {/*<Button*/}
-                {/*    onClick={() => {*/}
-                {/*        saveStronghold(input).then(r => readStronghold())*/}
-                {/*        setInput('')*/}
-                {/*    }}*/}
-                {/*    fontFamily={'heading'}*/}
-                {/*    mt={8}*/}
-                {/*    w={'full'}*/}
-                {/*    bgGradient="linear(to-r, red.400,pink.400)"*/}
-                {/*    color={'white'}*/}
-                {/*    _hover={{*/}
-                {/*        bgGradient: 'linear(to-r, red.400,pink.400)',*/}
-                {/*        boxShadow: 'xl',*/}
-                {/*    }}>*/}
-                {/*    Submit*/}
-                {/*</Button>*/}
                 <Stack
                     bg={'gray.50'}
                     rounded={'md'}
@@ -117,17 +99,64 @@ export default function Passwords() {
                     m={{base: 4, sm: 6, md: 8}}
                     spacing={{base: 8}}
                 >
-                    <Stack spacing={4}>
+                    <HStack spacing={4}>
                         <Heading
                             color={'gray.800'}
                             lineHeight={1.1}
-                            fontSize={{base: 'xl', sm: '2xl', md: '3xl'}}>
+                            fontSize={{base: '2xl', sm: '3xl', md: '4xl'}}>
                             Password List
                         </Heading>
-                        {/*<Text color={'gray.500'} fontSize={{base: 'sm', sm: 'md'}}>*/}
-                        {/*    putF*/}
-                        {/*</Text>*/}
-                    </Stack>
+                        <Spacer/>
+                        <Button fontFamily={'heading'} w={'30%'}
+                                bgGradient="linear(to-r, red.400,pink.400)"
+                                color={'white'} onClick={onOpen}
+                                _hover={{
+                                    bgGradient: 'linear(to-r, red.400,pink.400)',
+                                    boxShadow: 'xl',
+                                }}>Add Account</Button>
+                        <Modal onClose={onClose} isOpen={isOpen} isCentered>
+                            <ModalOverlay/>
+                            <ModalContent>
+                                <ModalHeader>Add Account</ModalHeader>
+                                <ModalCloseButton/>
+                                <ModalBody>
+                                    <Stack spacing={4}>
+                                        <HStack>
+                                            <FormLabel>Website:</FormLabel>
+                                            <InputGroup>
+                                                <InputLeftAddon children='https://'/>
+                                                <Input placeholder="google.com" value={newWebsite}
+                                                       onChange={e => setNewWebsite(e.target.value)}/>
+                                            </InputGroup>
+                                        </HStack>
+                                        <HStack>
+                                            <FormLabel>Username:</FormLabel>
+                                            <Input placeholder="firstname@lastname.io" value={newUsername}
+                                                   onChange={e => setNewUsername(e.target.value)}/>
+                                        </HStack>
+                                        <HStack>
+                                            <FormLabel>Password:</FormLabel>
+                                            <Input placeholder="Enter password" value={newPassword}
+                                                   onChange={e => setNewPassword(e.target.value)}/>
+                                        </HStack>
+                                    </Stack>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button onClick={() => {
+                                        handleSubmit().catch(e => console.log(e));
+                                        onClose();
+                                        toast({
+                                            title: 'Account Added.',
+                                            // description: "We've created your account for you.",
+                                            status: 'success',
+                                            duration: 9000,
+                                            isClosable: true,
+                                        })
+                                    }}>Submit</Button>
+                                </ModalFooter>
+                            </ModalContent>
+                        </Modal>
+                    </HStack>
                     <PasswordTable/>
                 </Stack>
             </Box>
