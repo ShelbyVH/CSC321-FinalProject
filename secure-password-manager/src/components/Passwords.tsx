@@ -1,26 +1,39 @@
 import {
-    Box, Button,
-    Center, Spacer,
-    Heading, HStack,
-    Modal, ModalBody,
+    Box,
+    Button,
+    Center,
+    FormLabel,
+    Heading,
+    HStack,
+    Input,
+    InputGroup,
+    InputLeftAddon,
+    Modal,
+    ModalBody,
     ModalCloseButton,
-    ModalContent, ModalFooter,
-    ModalHeader, ModalOverlay,
-    Stack, useDisclosure, Input,
-    FormLabel, InputLeftAddon,
-    InputGroup, useToast,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Spacer,
+    Stack,
+    useDisclosure,
+    useToast,
 } from "@chakra-ui/react";
 import {Location, Stronghold} from "tauri-plugin-stronghold-api";
 import {useEffect, useState} from "react";
 import {useUser} from "use-supabase";
 import {useLocation} from "wouter";
-import PasswordTable from "./PasswordTable";
+import {PasswordItem, PasswordTable} from "./PasswordTable";
+// import jsondata from "../api/MOCK_DATA.json"
 
 export default function Passwords() {
     const [newPassword, setNewPassword] = useState('')
     const [newUsername, setNewUsername] = useState('')
     const [newWebsite, setNewWebsite] = useState('')
     const [routelocation, setLocation] = useLocation()
+    const tempArray: PasswordItem[] = []
+    const [itemList, setItemList] = useState(tempArray)
     const toast = useToast()
     const {isOpen, onOpen, onClose} = useDisclosure()
     const user = useUser()
@@ -37,14 +50,13 @@ export default function Passwords() {
     const store = stronghold.getStore('Store', [])
     const vault = stronghold.getVault('Vault', [])
     const location = Location.generic('vault', 'record')
-    // stronghold.onStatusChange((status: { snapshot: { status: string } }) => {
-    //     // Stronghold Status Change Log
-    //     console.log('got new stronghold status: ' + status.snapshot.status)
-    // })
+
 
     useEffect(() => {
         InitStronghold().then(() => console.log('procedures finished')).catch(e => console.log('error running procedures: ' + e))
         readStronghold().catch(e => console.log(e))
+        readItemsStronghold().catch(e => console.log(e))
+        // saveStronghold(JSON.stringify(jsondata)).catch(e => console.log(e))
     }, [])
 
 
@@ -67,9 +79,13 @@ export default function Passwords() {
 
     async function readStronghold() {
         const json = await store.get(location)
-        const obj = JSON.parse(json)
-        console.log(obj)
-        return obj;
+        return JSON.parse(json);
+    }
+
+    async function readItemsStronghold() {
+        const json = await store.get(location)
+        const obj: Array<PasswordItem> = JSON.parse(json)
+        setItemList(obj)
     }
 
     async function handleSubmit() {
@@ -87,7 +103,6 @@ export default function Passwords() {
         setNewWebsite('')
         setNewUsername('')
     }
-
 
     return (
         <Center minH={'calc(100vh - 50px)'} bgGradient="linear(to-tr, #283048, #859398)">
@@ -157,7 +172,7 @@ export default function Passwords() {
                             </ModalContent>
                         </Modal>
                     </HStack>
-                    <PasswordTable/>
+                    <PasswordTable items={itemList}/>
                 </Stack>
             </Box>
         </Center>
