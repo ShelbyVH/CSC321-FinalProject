@@ -19,7 +19,7 @@ export default function SignUp() {
             alert(error.error_description || error.message)
         } finally {
             alert("Signup Successful!");
-            setLocation("/")
+            setLocation("/home")
         }
     }
 

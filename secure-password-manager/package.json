@@ -1,6 +1,6 @@
 {
   "name": "secure-password-manager",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "license": "ISC",
   "scripts": {
     "dev": "vite",

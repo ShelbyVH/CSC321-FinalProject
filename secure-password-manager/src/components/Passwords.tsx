@@ -7,7 +7,7 @@ import {
     HStack,
     Input,
     InputGroup,
-    InputLeftAddon,
+    InputLeftAddon, InputRightElement,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -29,8 +29,10 @@ import {PasswordItem, PasswordTable} from "./PasswordTable";
 
 export default function Passwords() {
     const [newPassword, setNewPassword] = useState('')
+    const [show, setShow] = useState(false)
     const [newUsername, setNewUsername] = useState('')
     const [newWebsite, setNewWebsite] = useState('')
+    const [refreshToken, setRefreshToken] = useState(false);
     const [routelocation, setLocation] = useLocation()
     const tempArray: PasswordItem[] = []
     const [itemList, setItemList] = useState(tempArray)
@@ -39,7 +41,7 @@ export default function Passwords() {
     const user = useUser()
     let strongHoldPath = "example.stronghold";
     let strongHoldPassword = "password";
-    if (user) {
+    if (user != null) {
         strongHoldPath = user.email + ".stronghold"
         strongHoldPassword = user.id;
     } else {
@@ -54,10 +56,14 @@ export default function Passwords() {
 
     useEffect(() => {
         InitStronghold().then(() => console.log('procedures finished')).catch(e => console.log('error running procedures: ' + e))
-        readStronghold().catch(e => console.log(e))
+        readStronghold().then(json => {
+            console.log(`stronghold: ${json.length}`)
+            if (json.length < 2) {
+                saveStronghold(JSON.stringify([])).then(() => console.log("[] set for stronghold"))
+            }
+        });
         readItemsStronghold().catch(e => console.log(e))
-        // saveStronghold(JSON.stringify(jsondata)).catch(e => console.log(e))
-    }, [])
+    }, [refreshToken])
 
 
     async function InitStronghold() {
@@ -78,8 +84,12 @@ export default function Passwords() {
     }
 
     async function readStronghold() {
-        const json = await store.get(location)
-        return JSON.parse(json);
+        try {
+            return await store.get(location)
+        } catch (e) {
+            saveStronghold(JSON.stringify([])).then(() => console.log("[] set for stronghold"))
+            return await store.get(location)
+        }
     }
 
     async function readItemsStronghold() {
@@ -89,7 +99,7 @@ export default function Passwords() {
     }
 
     async function handleSubmit() {
-        const obj = await readStronghold()
+        const obj = JSON.parse(await readStronghold())
         const item = {
             title: `${newWebsite}`,
             website: `https://${newWebsite}`,
@@ -102,6 +112,7 @@ export default function Passwords() {
         setNewPassword('')
         setNewWebsite('')
         setNewUsername('')
+        setRefreshToken(!refreshToken)
     }
 
     return (
@@ -151,8 +162,20 @@ export default function Passwords() {
                                         </HStack>
                                         <HStack>
                                             <FormLabel>Password:</FormLabel>
-                                            <Input placeholder="Enter password" value={newPassword}
-                                                   onChange={e => setNewPassword(e.target.value)}/>
+                                            <InputGroup size='md'>
+                                                <Input
+                                                    value={newPassword}
+                                                    onChange={e => setNewPassword(e.target.value)}
+                                                    pr='4.5rem'
+                                                    type={show ? 'text' : 'password'}
+                                                    placeholder='Enter password'
+                                                />
+                                                <InputRightElement width='4.5rem'>
+                                                    <Button h='1.75rem' size='sm' onClick={() => setShow(!show)}>
+                                                        {show ? 'Hide' : 'Show'}
+                                                    </Button>
+                                                </InputRightElement>
+                                            </InputGroup>
                                         </HStack>
                                     </Stack>
                                 </ModalBody>
@@ -164,7 +187,7 @@ export default function Passwords() {
                                             title: 'Account Added.',
                                             // description: "We've created your account for you.",
                                             status: 'success',
-                                            duration: 9000,
+                                            duration: 5000,
                                             isClosable: true,
                                         })
                                     }}>Submit</Button>

@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import {IconType} from 'react-icons';
 import {ReactText} from 'react';
-import {FaEdit, FaHome, FaKey, FaSignOutAlt, FaUserShield} from "react-icons/fa";
+import {FaHome, FaKey, FaSignOutAlt, FaUserShield} from "react-icons/fa";
 import {useUser} from "use-supabase";
 import {useLocation} from "wouter";
 
@@ -26,7 +26,7 @@ const LinkItems: Array<LinkItemProps> = [
     {name: 'Home', icon: FaHome, route: "/home"},
     {name: 'Password Generator', icon: FaKey, route: "/home/passwordgen"},
     {name: 'Security', icon: FaUserShield, route: "/home/security"},
-    {name: 'Settings', icon: FaEdit, route: "/home/settings"},
+    //{name: 'Settings', icon: FaEdit, route: "/home/settings"},
     {name: 'Logout', icon: FaSignOutAlt, route: "/logout"}
 ];
 

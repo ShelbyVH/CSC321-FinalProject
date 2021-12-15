@@ -1,7 +1,7 @@
 {
   "package": {
     "productName": "Secure Password Manager",
-    "version": "0.1.0"
+    "version": "1.0.0"
   },
   "build": {
     "distDir": "../dist",
@@ -13,7 +13,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.tauri.dev",
+      "identifier": "com.shelby.dev",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",

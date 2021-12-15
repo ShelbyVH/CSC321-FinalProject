@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // This will wait for the window to load
     setTimeout(() => {
         invoke('close_splashscreen').catch(e => console.log(e));
-    }, 100)
+    }, 2500)
 })
 
 async function setupNotifications() {
@@ -39,7 +39,8 @@ function App() {
             <ChakraProvider theme={theme}>
                 <WindowBar/>
                 <Box bgGradient="linear(to-tr, #283048, #859398)" width="100vw" height="100vh" paddingTop={"50px"}>
-                    <Route path="/"><Welcome/></Route>
+                    <Route path="/"><LogOut/></Route>
+                    <Route path="/welcome"><Welcome/></Route>
                     <Route path="/login"><Login/></Route>
                     <Route path="/logout"><LogOut/></Route>
                     <Route path="/home"><Home child={<Passwords/>}/></Route>

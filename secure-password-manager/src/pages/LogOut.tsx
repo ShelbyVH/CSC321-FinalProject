@@ -8,9 +8,9 @@ export default function LogOut() {
             let {error} = await supabase.auth.signOut()
             if (error) throw error
         } catch (error: any) {
-            alert(error.error_description || error.message)
+            //alert(error.error_description || error.message)
         } finally {
-            setLocation("/")
+            setLocation("/welcome")
         }
     }
     SignOut();
